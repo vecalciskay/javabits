@@ -1,5 +1,5 @@
-Java bits
-=========
+# Java bits
+===========
 Este es un pequeño repositorio con varios programas que he ido recolectando para 
 la materia de Estructura de datos.
 
