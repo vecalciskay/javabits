@@ -1,0 +1,46 @@
+Ejecute los siguietnes comandos para instalar la base de datos que funciona
+con este programa:
+
+---------------------------------------------------------------------------
+1) Crear la base de datos
+
+> CREATE DATABASE estructuras;
+
+---------------------------------------------------------------------------
+2) Usar la base de datos
+
+> USE estructuras;
+
+---------------------------------------------------------------------------
+3) Crear la tabla de personas
+
+> CREATE TABLE `persona` (
+   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+   `nombre` VARCHAR(100) DEFAULT NULL,
+   `fechaNacimiento` DATETIME NOT NULL,
+   `salario` FLOAT NOT NULL,
+   PRIMARY KEY (id)
+ );
+
+---------------------------------------------------------------------------
+4) Probar haciendo un insert
+
+> INSERT INTO `persona` (`nombre`,`fechaNacimiento`,`salario`)
+  VALUES ('hugo', '1985-05-24', 5000.5);
+
+---------------------------------------------------------------------------  
+5) Probar que el insert fue bien hecho
+
+> SELECT * FROM `persona`;
+
+---------------------------------------------------------------------------
+6) Probar un update
+
+> UPDATE `persona`
+   SET `nombre` = 'paco'
+   WHERE `id` = 1;
+
+---------------------------------------------------------------------------   
+7) Probar el delete
+
+> DELETE FROM `persona` WHERE `id` = 1;
