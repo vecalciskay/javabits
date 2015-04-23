@@ -16,7 +16,7 @@ de figuras en el mismo plano con las mismas operaciones.
 
 ## Diagrama de clases
 
-<img src="img/CatchMeCD.png" width="600" />
+<img src="img/CatchMeCD.png" width="800" />
 
 Primeramente observemos el modelo para ver el uso del polimorfismo:
 
