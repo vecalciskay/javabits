@@ -51,3 +51,9 @@ Se da un color a cada una de las ramas de los árboles para simular un árbol de v
 Además, también se puede dar un ancho a las líneas. El resultado es el siguiente:
 
 <img src="img/fractal.png" width="500">
+
+71536527
+
+Encuesta: Bolivia 
+
+++49 176 84 63 1004

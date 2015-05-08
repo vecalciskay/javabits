@@ -18,5 +18,26 @@ de figuras en el mismo plano con las mismas operaciones.
 
 <img src="img/CatchMeCD.png" width="800" />
 
-Primeramente observemos el modelo para ver el uso del polimorfismo:
+### Polimorfismo
+
+La clase ``Figure`` hace de superclase para las clases ``Circle`` y ``Square``. Eso significa que estas
+dos clases heredan todo lo que se define en ``Figure``.
+
+Las cosas en común que tienen son la velocidad, posición y la funcionalidad de moverse. Cómo se muevan dependerá de cada uno pero puede
+colocarse aquí una forma de moverse por defecto y así evitar determinarlo en las subclases.
+
+Las funcionalidades que son propias de cada objeto son: ``draw()`` y ``isInside()``. Estos dos métodos son visiblemente muy diferentes
+entre las diferentes clases, por ello es que cada uno debe definir estos dos métodos para ver cómo se implementa con esa figura en 
+particular.
+
+Un método interesante de ambos es probablemente ``isInside``, aquí se ve el método del ``Square`` (cuadrado):
+
+```
+
+```
+
+### Observer
+
+### Estructura de Datos
+
 
