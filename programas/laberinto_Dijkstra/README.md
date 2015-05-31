@@ -22,13 +22,17 @@ exactamente la configuración del laberinto.
 
 Luego se pueden elegir cualquiera de las dos opciones:
 
-* BFS : Solamente se puede saber la cantidad de pasos mínimo
-* Dijkstra : Aquí se puede saber exatamente el recorrido que se debe seguir
+* *BFS* : Solamente se puede saber la cantidad de pasos mínimo
+* *Dijkstra* : Aquí se puede saber exactamente el recorrido que se debe seguir
 
 ### Ejecución Dijkstra
+
+Aquí se puede ver una solicitud de ver el camino más corto entre el nodo 6 y el 35
 
 <img src="img/run4_6_35.png" width="167" />
 
 ### Ejecución BFS
+
+Aquí se hizo la misma solicitud pero eligiendo el algoritmo de BFS, solamente se puede saber el número de saltos
 
 <img src="img/run5_6_35.png" width="391" />
