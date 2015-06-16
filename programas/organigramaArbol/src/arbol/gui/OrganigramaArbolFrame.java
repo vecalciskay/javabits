@@ -131,18 +131,44 @@ public class OrganigramaArbolFrame extends JFrame {
 	private void initBoard() {
 		elArbol = new Arbol<Persona>();
 		elArbol.addObserver(thePanel);
+	}
+
+	public void mnuFile_EditarNodo_actionPerformed(Object object) {
+		JTextField fieldNombre = new JTextField(5);
+		JComboBox<String> fieldCargo = new JComboBox<String>(new CargosComboBoxModel());
 		
-//		try {
-//			Persona p1 = new Persona("Hugo", 2);
-//			Persona p2 = new Persona("Paco", 4);
-//			Persona p3 = new Persona("Luis", 3);
-//			elArbol.insertar(p1, null);
-//			elArbol.insertar(p2, p1.getId());
-//			elArbol.insertar(p3, p1.getId());
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Persona obj = elArbol.getContenidoSeleccionado();
+		if (obj == null) {
+			logger.warn("No hay objeto seleccionado");
+			return;
+		}
+		
+		fieldNombre.setText(obj.getNombre());
+		fieldCargo.setSelectedItem(obj.getCargo());
+
+		JPanel myPanel = new JPanel();
+		myPanel.setLayout(new BorderLayout());
+		JPanel myPanelTop = new JPanel();
+		myPanelTop.setLayout(new BorderLayout());
+		myPanel.add(myPanelTop, BorderLayout.NORTH);
+		
+		myPanelTop.add(new JLabel("Nombre:"), BorderLayout.NORTH);
+		myPanelTop.add(fieldNombre, BorderLayout.CENTER);
+		myPanelTop.add(Box.createVerticalStrut(15), BorderLayout.SOUTH); // a spacer
+		myPanel.add(new JLabel("Cargo:"), BorderLayout.CENTER);
+		myPanel.add(fieldCargo, BorderLayout.SOUTH);
+
+		int result = JOptionPane.showConfirmDialog(null, myPanel,
+				"Datos de la persona", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+
+			String nombre = fieldNombre.getText();
+			int cargo = fieldCargo.getSelectedIndex();
+			obj.setNombre(nombre);
+			obj.setIndiceCargo(cargo);
+			
+			thePanel.repaint();
+		}
 	}
 
 }

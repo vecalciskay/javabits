@@ -18,10 +18,15 @@ public class Persona implements IdentityAble, Drawable {
 	
 	private String nombre;
 	private int indiceCargo;
+	private int id;
+	
+	private static int idObjeto = 1;
 	
 	public Persona(String n, int c) {
 		nombre = n;
 		indiceCargo = c;
+		id = idObjeto;
+		idObjeto++;
 	}
 
 	public String getNombre() {
@@ -106,7 +111,7 @@ public class Persona implements IdentityAble, Drawable {
 
 	@Override
 	public String getId() {
-		return nombre + String.valueOf(indiceCargo);
+		return String.valueOf(id); //nombre + String.valueOf(indiceCargo);
 	}
 	
 	private static Cadena<String> cargos;

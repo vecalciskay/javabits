@@ -18,9 +18,15 @@ public class Arbol<T> extends Observable {
 	
 	public static final String ELIMINAR = "ELIMINAR";
 	public static final String NUEVOHIJO = "NUEVOHIJO";
+	public static final String MOVER = "MOVER";
+	public static final String EDITAR = "EDITAR";
 
 	private Nodo<T> raiz;
 	private Nodo<T> seleccionadoNodo;
+	private int seleccionadoNodoX;
+	private int seleccionadoNodoY;
+	private int seleccionadoMovidaX;
+	private int seleccionadoMovidaY;
 	private String seleccionadoComando;
 	
 	public Arbol() {
@@ -41,6 +47,12 @@ public class Arbol<T> extends Observable {
 
 	public void setSeleccionadoNodo(Arbol<T>.Nodo<T> nodo) {
 		this.seleccionadoNodo = nodo;
+		
+		if (nodo == null) 
+		{
+			this.setChanged();
+			this.notifyObservers();
+		}
 	}
 
 	public String getSeleccionadoComando() {
@@ -56,6 +68,19 @@ public class Arbol<T> extends Observable {
 			return null;
 		
 		return seleccionadoNodo.getId();
+	}
+
+	public void setSeleccionadoNodoXY(int x, int y) {
+		this.seleccionadoNodoX = x;
+		this.seleccionadoNodoY = y;
+	}
+	
+	public void setSeleccionadoMovidaXY(int x, int y) {
+		this.seleccionadoMovidaX = x;
+		this.seleccionadoMovidaY = y;
+		
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public void insertar(T obj, String idPadre) throws Exception {
@@ -82,7 +107,21 @@ public class Arbol<T> extends Observable {
 			return;
 		}
 		
-		raiz.draw(g, x, y);
+		raiz.draw(g, x, y, false);
+		
+		if (seleccionadoNodo != null && seleccionadoComando.equals(MOVER)) {
+			
+			Drawable d = (Drawable)(seleccionadoNodo.getContenido());
+			int anchoNodo = d.getAncho(g) + MARGEN_NODO * 2;
+			
+			int realX = (anchoNodo / 2 + seleccionadoNodo.getLastX()) - seleccionadoNodo.getAncho(g) / 2;
+			
+			int offset = (seleccionadoNodoX - realX);
+			int xNodo = (seleccionadoMovidaX - offset);
+			offset = (seleccionadoNodoY - seleccionadoNodo.getLastY());
+			int yNodo = (seleccionadoMovidaY - offset);
+			seleccionadoNodo.draw(g, xNodo, yNodo, true);
+		}
 	}
 
 	public void clicEn(Graphics g, int x, int y) {
@@ -93,6 +132,16 @@ public class Arbol<T> extends Observable {
 			return;
 		
 		raiz.clicEn(g, x, y, this);
+	}
+	
+	public void mueveNodoSeleccionadoA(Graphics g, int x, int y) {
+		if (raiz == null)
+			return;
+		
+		raiz.mueveNodoSeleccionadoA(g, x, y, seleccionadoNodo);
+		
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	public void eliminarSeleccionado() {
@@ -107,6 +156,13 @@ public class Arbol<T> extends Observable {
 		}
 		this.setChanged();
 		this.notifyObservers();
+	}
+	
+
+	public T getContenidoSeleccionado() {
+		if (seleccionadoNodo != null)
+			return seleccionadoNodo.getContenido();
+		return null;
 	}
 	
 	class Nodo<E> {
@@ -126,6 +182,65 @@ public class Arbol<T> extends Observable {
 			}
 		}
 		
+		/**
+		 * Retorna verdadero cuando la accion ya se ha llevado a cabo y falso
+		 * cuando debe seguir buscando en los hijos
+		 * @param g
+		 * @param x
+		 * @param y
+		 * @param seleccionadoNodo
+		 * @return
+		 */
+		public boolean mueveNodoSeleccionadoA(Graphics g, int x, int y,
+				Arbol<T>.Nodo<E> seleccionadoNodo) {
+			Drawable d = (Drawable)contenido;
+			int anchoNodo = d.getAncho(g) + MARGEN_NODO * 2;
+			int altoNodo = d.getAlto(g) + MARGEN_NODO * 2;
+			if (x > lastX && x < (lastX + anchoNodo) &&
+					y > lastY && y < (lastY + altoNodo)) {
+				
+				if (this.tienePorPadreEnlaJerarquiaA(seleccionadoNodo)) {
+					return true;
+				} else {
+					this.moverNodoComoHijo(seleccionadoNodo);
+					return true;
+				}
+			}
+			
+			for(String key : hijos.keySet()) {
+				Nodo<E> hijo = hijos.get(key);
+				boolean resultado = hijo.mueveNodoSeleccionadoA(g, x, y, seleccionadoNodo);
+				if (resultado)
+					return true;
+			}
+			return false;
+		}
+
+		private void moverNodoComoHijo(Arbol<T>.Nodo<E> seleccionadoNodo) {
+			if (hijos.containsKey(seleccionadoNodo.getId())) {
+				logger.info(seleccionadoNodo.getId() + " ya es hijo de " + this.getId());
+				return;
+			}
+			
+			Arbol<T>.Nodo<E> padreAntiguo = seleccionadoNodo.getPadre();
+			padreAntiguo.eliminarHijo(seleccionadoNodo.getId());
+			seleccionadoNodo.setPadre(this);
+			hijos.put(seleccionadoNodo.getId(), seleccionadoNodo);
+		}
+
+		private boolean tienePorPadreEnlaJerarquiaA(
+				Arbol<T>.Nodo<E> seleccionadoNodo) {
+			Arbol<T>.Nodo<E> padreActual = this;
+			
+			while(padreActual != null) {
+				if (padreActual == seleccionadoNodo)
+					return true;
+				padreActual = padreActual.getPadre();
+			}
+			
+			return false;
+		}
+
 		public void eliminarHijo(String id) {
 			if (hijos.containsKey(id)) {
 				hijos.remove(id);
@@ -147,15 +262,30 @@ public class Arbol<T> extends Observable {
 				
 				if (x > (lastX + anchoNodo - dosMargenes) && x < (lastX + anchoNodo) &&
 					y > lastY && y < (lastY + dosMargenes)) {
-					logger.info("Selecciona comando ELIMINAR");
+					logger.info("Selecciona comando ELIMINAR nodo " + this.getId());
 					arbol.setSeleccionadoComando(Arbol.ELIMINAR);
+					
+					return;
 				}
 				
 				if (x > (lastX + anchoNodo - 2 * dosMargenes) && x < (lastX + anchoNodo - dosMargenes) &&
 						y > lastY && y < (lastY + dosMargenes)) {
-					logger.info("Selecciona comando NUEVOHIJO");
+					logger.info("Selecciona comando NUEVOHIJO en el nodo " + this.getId());
 					arbol.setSeleccionadoComando(Arbol.NUEVOHIJO);
+					
+					return;
 				}
+				
+				if (this.padre != null &&
+						x > (lastX + anchoNodo - 3 * dosMargenes) && x < (lastX + anchoNodo - 2 * dosMargenes) &&
+						y > lastY && y < (lastY + dosMargenes)) {
+					logger.info("Selecciona comando MOVER el nodo " + this.getId());
+					arbol.setSeleccionadoComando(Arbol.MOVER);
+					
+					return;
+				}
+				
+				arbol.setSeleccionadoComando(Arbol.EDITAR);
 			}
 			
 			if (arbol.getSeleccionadoNodo() != null)
@@ -169,7 +299,7 @@ public class Arbol<T> extends Observable {
 			}
 		}
 
-		public void draw(Graphics g, int x, int y) {
+		public void draw(Graphics g, int x, int y, boolean transparent) {
 
 			if (!(contenido instanceof Drawable))
 			{
@@ -182,7 +312,8 @@ public class Arbol<T> extends Observable {
 				int anchoNodo = d.getAncho(g) + MARGEN_NODO * 2;
 				int altoNodo = d.getAlto(g) + MARGEN_NODO * 2;
 				
-				drawNodeOnly(g, x, y, anchoNodo, altoNodo);
+				boolean update = !transparent;
+				drawNodeOnly(g, x, y, anchoNodo, altoNodo, update);
 				return;
 			}
 			
@@ -202,25 +333,31 @@ public class Arbol<T> extends Observable {
 				int anchoHijo = hijo.getAncho(g);
 				g.setColor(Color.black);
 				g.drawLine(x + anchoTotal / 2, y + altoNodo / 2, xNodo + anchoHijo / 2, yNodo + altoNodo / 2);
-				hijo.draw(g, xNodo, yNodo);
+				hijo.draw(g, xNodo, yNodo, transparent);
 				
 				xNodo += hijo.getAncho(g) + ESPACIO_HORIZONTAL_NODO;
 			}
 			
-			drawNodeOnly(g, xNodoPadre, y, anchoNodo, altoNodo);
+			boolean update = !transparent;
+			drawNodeOnly(g, xNodoPadre, y, anchoNodo, altoNodo, update);
 		}
 		
-		private void drawNodeOnly(Graphics g, int x, int y, int anchoNodo, int altoNodo) {
+		private void drawNodeOnly(Graphics g, int x, int y, int anchoNodo, int altoNodo, boolean update) {
 			
 			Drawable d = (Drawable)contenido;
-
-			lastX = x;
-			lastY = y;
+			int opacity = 155;
 			
-			g.setColor(Color.white);
+			if (update) 
+			{
+				lastX = x;
+				lastY = y;
+				opacity = 255;
+			} 
+			
+			g.setColor(new Color(255,255,255,opacity));
 			g.fillRect(x, y, anchoNodo, altoNodo);
 			
-			g.setColor(Color.black);
+			g.setColor(new Color(0,0,0,opacity));
 			g.drawRect(x, y, anchoNodo, altoNodo);
 			
 			drawCommands(g, x, y, anchoNodo);
@@ -235,6 +372,7 @@ public class Arbol<T> extends Observable {
 			g.drawRect(x + anchoNodo - dosMargenes, y, dosMargenes, dosMargenes);
 			g.drawRect(x + anchoNodo - 2 * dosMargenes, y, dosMargenes, dosMargenes);
 			
+			
 			g.drawLine(x + anchoNodo - 2, y + 2, 
 					x + anchoNodo - dosMargenes + 2, y + dosMargenes - 2);
 			g.drawLine(x + anchoNodo - dosMargenes + 2, y + 2, 
@@ -244,6 +382,15 @@ public class Arbol<T> extends Observable {
 					x + anchoNodo - dosMargenes - MARGEN_NODO, y + dosMargenes - 2);
 			g.drawLine(x + anchoNodo - 2 * dosMargenes + 2, y + MARGEN_NODO, 
 					x + anchoNodo - dosMargenes - 2, y + MARGEN_NODO);
+			
+			if (this.padre != null) {
+				g.drawRect(x + anchoNodo - 3 * dosMargenes, y, dosMargenes, dosMargenes);
+				
+				g.drawLine(x + anchoNodo - 2 * dosMargenes - MARGEN_NODO, y + 2, 
+						x + anchoNodo - 2 * dosMargenes - MARGEN_NODO, y + dosMargenes - 2);
+				g.drawLine(x + anchoNodo - 3 * dosMargenes + 2, y + MARGEN_NODO, 
+						x + anchoNodo - 2 * dosMargenes - 2, y + MARGEN_NODO);
+			}
 		}
 
 		public int getAncho(Graphics g) {
@@ -296,6 +443,13 @@ public class Arbol<T> extends Observable {
 		public void setPadre(Nodo<E> padre) {
 			this.padre = padre;
 		}
+		
+		public int getLastX() {
+			return lastX;
+		}
+		public int getLastY() {
+			return lastY;
+		}
 
 		public void insertarHijo(E obj) throws Exception {
 			
@@ -333,4 +487,5 @@ public class Arbol<T> extends Observable {
 			return result.toString();
 		}
 	}
+
 }
