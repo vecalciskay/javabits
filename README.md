@@ -19,4 +19,5 @@ Aquí tenemos entonces:
 
 1. El curso para entender las bases de las estructuras de datos, el curso hace referencia 
    a algunos de los programas que ya se encuentran en el repositorio.
-2. Tablero Net: Este programa
+
+   El curso se encuentra en un PDF dentro de la carpeta docs.
