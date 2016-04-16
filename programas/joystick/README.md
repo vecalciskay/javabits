@@ -15,7 +15,7 @@ inmediatamente mostrar el cambio en la interfase. La única forma de lograr move
 que el servidor entiende. El servidor puede atender varios clientes a la vez, con lo cual al mismo tiempo pueden haber
 varias personas moiendo las figuras en el Canvas.
 
-<img src="img/Servidor.png" width="280" />
+<img src="img/Servidor.png" width="360" />
 
 La imagen que se ve del servidor es la imagen luego de ejecutar el programa Servidor y de que ha habido
 un cliente que se ha conectado que ha creado un círculo. Este flujo de uso del cliente se puede ver en el
@@ -26,13 +26,13 @@ siguiente párrafo.
 El cliente es un programa que se conecta a un servidor Canvas Joystick y comienza a enviarle las instrucciones 
 necesarias (definidas en el protocolo) 
 
-<img src="img/Inicio.png" width="280" />
+<img src="img/Inicio.png" width="360" />
 
 Lo primero que debe hacer el cliente es pedir las coordenadas para la conexión. Una vez conectado, el 
 cliente indica el estado de la conexión y pide todos los objetos que hay en el servidor y con eso
 llena el combo con la lista de objetos; si no hay ninguno no se coloca nada.
 
-<img src="img/Cliente Paso 1.png" width="280" />
+<img src="img/Cliente Paso 1.png" width="360" />
 
 Luego el cliente puede comenzar a realizar las operaciones válidas para el servidor. 
 
@@ -40,13 +40,13 @@ Luego el cliente puede comenzar a realizar las operaciones válidas para el serv
 * Se pueden crear hasta 3 tipos de objetos: circulos, cuadrados y triángulos
 * Se puede mover ucalquiera de los objetos en cuatro direcciones
 
-<img src="img/Cliente Crear Objeto.png" width="166" />
+<img src="img/Cliente Crear Objeto.png" width="360" />
 
 Al crear un objeto el cliente debe pedir el nombre del objeto para que sea identificado de manera única por 
 el servidor. El servidor responde si pudo o no pudo crearlo. En caso de crearlo automáticamente el
 objeto queda almacenado en el combo y también es automáticamente seleccionado.
 
-<img src="img/Cliente Mover Objeto.png" width="163" />
+<img src="img/Cliente Mover Objeto.png" width="360" />
 
 Con el objeto seleccionado se habilitan los botones para mover en las cuatro direcciones y se puede apretar
 en cualquiera de ellos para que muevan en la dirección indicada el objeto seleccionado por 10 pixeles.
