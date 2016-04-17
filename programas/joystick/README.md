@@ -97,3 +97,19 @@ Cliente se conecta nuevamente
 --> FIN
 Servidor cierra conexión
 ```
+
+## Uso de listas
+
+En el curso heos visto el uso y la creación de Listas dinámicas. Para este práctico se debe utilizar una
+y es necesario que tenga implementado el patrón de Iterator.
+
+## Consejos de implementación
+
+Para el servidor es obligatorio el uso de threads para que pueda aceptar varias conexiones al mismo tiempo.
+
+No veo cómo se pueda hacer este programa sin el uso de Observer de manera obsesiva tanto para el servidor
+como para el cliente.
+
+De la misma manera, para revisar de manera correcta que los comandos que nos lanza el cliente son correctos
+entonces la única manera relativamente sencilla es con expresiones regulares. En este caso deben programar
+una expresión regular por cada una de los posibles comandos.
