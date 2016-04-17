@@ -51,14 +51,49 @@ objeto queda almacenado en el combo y también es automáticamente seleccionado.
 Con el objeto seleccionado se habilitan los botones para mover en las cuatro direcciones y se puede apretar
 en cualquiera de ellos para que muevan en la dirección indicada el objeto seleccionado por 10 pixeles.
 
-## Uso de listas
+### Protocolo
 
-En el curso heos visto el uso y la creación de Listas dinámicas. Para este práctico se debe utilizar una
-y es necesario que tenga implementado el patrón de Iterator.
+Quizá lo más importante de este trabajo es lograr hacer una implementación correcta y limpia del protocolo 
+entre el servidor y el cliente.
 
-## Consejos de implementación
+Lo primero es utilizar un poco de seguridad. El servidor tiene una palabra clave que guarda en su configuración.
+El cliente DEBE conocer esta palabra clave y debe enviarla al conectarse al servidor. Por ejemplo, digamos
+que la palabra clave es BATMAN, vamos a simular en la siguiente la tabla la conversación que debería tener
+el cliente con el servidor:
 
-Para el servidor es obligatorio el uso de threads para que pueda aceptar varias conexiones al mismo tiempo.
+```
+--> BADMAN
+<-- ERROR
+--> FIN
+Servidor cierra conexión
 
-No veo cómo se pueda hacer este programa sin el uso de Observer de manera obsesiva tanto para el servidor
-como para el cliente.
+Cliente se conecta nuevamente
+--> BATMAN
+<-- OK
+--> LISTA
+<-- []
+--> CREAR CIRCULO A001
+<-- OK
+--> LISTA
+<-- [A001]
+--> CREAR CUADRADO A001
+<-- ERROR
+--> CREAR CUADRADO B001
+<-- OK
+--> LISTA
+<-- [A001,B001]
+--> MOVER A001 ARRIBA
+<-- OK
+--> MOVER B001 ABAJO
+<-- OK
+--> MOVER A001 DERECHA
+<-- OK
+--> MOVER A001 as6dlfjs
+<-- ERROR
+--> ELIMINAR A001
+<-- OK
+--> LISTA
+<-- [B001]
+--> FIN
+Servidor cierra conexión
+```
