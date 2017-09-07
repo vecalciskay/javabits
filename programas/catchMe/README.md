@@ -33,11 +33,40 @@ particular.
 Un método interesante de ambos es probablemente ``isInside``, aquí se ve el método del ``Square`` (cuadrado):
 
 ```
-
+	@Override
+	public boolean isInside(int x, int y) {
+		if (x > (this.x - size) &&
+				x < (this.x + size) &&
+				y > (this.y - size) &&
+				y < (this.y + size))
+			return true;
+		return false;
+	}
 ```
 
 ### Observer
 
+Es muy díficil pensar en hacer este programa sin aplicar correctamente el patrón Observer. El objeto
+observado de este programa es el ``GameBoard``. Cada vez que la ubicación de las figuras de la ``Cadena``
+cambia de posición entonces se avisa al observador para que este pinte el objeto completo, el tablero completo
+con todas las figuras en el lugar en el que estén.
+
+Se puede ver el codigo donde se llama al obserador. Es justamente despues de que todas las figuras se han
+moido un poco:
+
+```
+	public void move() {
+		Iterator<Figure> iter = figures.iterator();
+		while(iter.hasNext()) {
+			Figure f = iter.next();
+			f.moveAlongDirection(this);
+		}
+		this.setChanged();
+		this.notifyObservers();
+	}
+```
+
 ### Estructura de Datos
 
-
+Para este ejercicio se ha utilizado la estructura de datos de una Cadena (o Lista). Esta cadena se ha realizado con 
+generics y tiene la funcionalidad base para poder ingresar figuras y eliminarlas.
