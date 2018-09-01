@@ -9,7 +9,7 @@ public class AlgoritmoOrdenarQuickSort extends AlgoritmoOrdenar {
 	
 	@Override
 	public void ordenar(int[] lista) {
-		log.info("Ordenando con el algoritmo de quicksort");
+		log.info("Ordenando con el algoritmo del quicksort");
 	}
 
 }
