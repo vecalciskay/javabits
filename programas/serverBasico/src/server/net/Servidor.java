@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import server.conf.Configuracion;
 import server.exception.ServerException;
+import server.service.Servicio;
 
 public class Servidor {
 
@@ -38,13 +39,14 @@ public class Servidor {
 	private void crearHiloComando() {
 		try {
 			ServerSocket srvComandos = new ServerSocket(conf.getPuertoComando());
+			log.info("Se crea el socket servidor de comandos en el puerto " + conf.getPuertoComando());
 			while (true) {
 				Socket cltCmd = srvComandos.accept();
 				BufferedReader bin = new BufferedReader(new InputStreamReader(cltCmd.getInputStream()));
 
 				String linea = bin.readLine();
 				log.info("Se recibió el comando: " + linea);
-				if (linea.equals(conf.getPalabraClaveTerminar())) {
+				if (linea.indexOf(conf.getPalabraClaveTerminar()) > 0) {
 					parar();
 					break;
 				}
@@ -54,8 +56,7 @@ public class Servidor {
 			srvComandos.close();
 			srvComandos = null;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Ocurrio un error al leer el comando en el hilo de comando", e);
 		}
 
 	}
@@ -116,7 +117,24 @@ public class Servidor {
 	}
 
 	protected void darServicio(Socket clt) {
-		// TODO Auto-generated method stub
-
+		log.info("Recibe un nuevo cliente en el puerto cliente " + clt.getPort() + ":" + clt.getLocalPort());
+		
+		Servicio cltServicio = null;
+		try {
+			cltServicio = Servicio.construirServicio(conf.getServicio());
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e1) {
+			log.error("Parece que la clase de la configuración " + conf.getServicio() + " no esta igual al nombre de la clase", e1);
+			return;
+		}
+		
+		try {
+			cltServicio.configurar(clt);
+		} catch (IOException e) {
+			log.error("No se puede configurar el servicio", e);
+			return;
+		}
+		
+		Thread worker = new Thread(cltServicio);
+		worker.start();
 	}
 }
