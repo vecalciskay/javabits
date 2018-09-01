@@ -11,7 +11,7 @@ public class AlgoritmoOrdenarQuickSort extends AlgoritmoOrdenar {
 	public void ordenar(int[] lista) {
 		log.info("Ordenando con el algoritmo del quicksort");
 		
-		quicksort(lista, 0, lista.length);
+		quicksort(lista, 0, lista.length - 1);
 	}
 
 	private void quicksort(int[] lista, int izq, int der) {
