@@ -46,7 +46,7 @@ public class Servidor {
 
 				String linea = bin.readLine();
 				log.info("Se recibió el comando: " + linea);
-				if (linea.indexOf(conf.getPalabraClaveTerminar()) > 0) {
+				if (linea.indexOf(conf.getPalabraClaveTerminar()) >= 0) {
 					parar();
 					break;
 				}

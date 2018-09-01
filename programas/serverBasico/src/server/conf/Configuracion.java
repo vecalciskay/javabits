@@ -4,7 +4,7 @@ public class Configuracion {
 
 	private static final int PUERTO_SRV = 7676;
 	private static final int PUERTO_CMD = 7677;
-	private static final String SERVICIO = "ORDENAR";
+	private static final String SERVICIO = "Ordenar";
 	private static final String SHUTDOWN_KEYWORD = "FINALIZAR";
 	private static Configuracion singleton = null;
 	

@@ -1,10 +1,15 @@
 package server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import server.conf.Configuracion;
 import server.exception.ServerException;
 import server.net.Servidor;
 
 public class ServidorMain {
+	
+	private static final Logger log = LogManager.getLogger();
 
 	public static void main(String[] args) {
 
@@ -13,15 +18,14 @@ public class ServidorMain {
 		try {
 			srv = new Servidor(Configuracion.getOrCreate());
 		} catch (ServerException e) {
-			System.out.println("Error al comenzar: " + e.getMessage());
+			log.error("Error al comenzar: " + e.getMessage());
 			return;
 		}
 		
 		try {
 			srv.comenzar();
 		} catch (ServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error al comenzar el servidor", e);
 		}
 
 	}
