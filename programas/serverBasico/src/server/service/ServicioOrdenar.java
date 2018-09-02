@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 import server.algo.AlgoritmoOrdenar;
 import server.algo.AlgoritmoOrdenarQuickSort;
 import server.algo.AlgoritmoOrdenarSimple;
+import server.stat.MensajeTipo;
+import server.stat.MensajeTipo.Tipo;
 
 /**
  * La clase del Servicio ORDENAR. Esta clase debe implementar el protocolo
@@ -51,9 +53,7 @@ public class ServicioOrdenar extends Servicio {
 
 		try {
 			// Lee HOLA
-			String linea = "";
-			linea = clienteInput.readLine();
-			log.info("-CLIENTE- " + linea);
+			String linea = leer();
 
 			if (!linea.endsWith(CMD_HOLA)) {
 				log.error("No coloco " + CMD_HOLA + " primero");
@@ -61,14 +61,12 @@ public class ServicioOrdenar extends Servicio {
 				return;
 			}
 
-			clienteOutput.println(CMD_OK);
-			log.info("-SERVER- OK");
+			escribir(CMD_OK);
 
 			// Lee LISTA
 			boolean faltaLista = true;
 			while (faltaLista) {
-				linea = clienteInput.readLine();
-				log.info("-CLIENTE- " + linea);
+				linea = leer();
 
 				if (!linea.startsWith(CMD_LISTA)) {
 					log.error("No coloco " + CMD_LISTA + " con numeros despues");
@@ -86,8 +84,7 @@ public class ServicioOrdenar extends Servicio {
 				}
 
 				crearListaNumeros(numeros, cantidadNumeros);
-				clienteOutput.println(CMD_OK + " " + cantidadNumeros);
-				log.info("-SERVER- " + CMD_OK + " " + cantidadNumeros);
+				escribir(CMD_OK + " " + cantidadNumeros);
 
 				faltaLista = false;
 			}
@@ -95,8 +92,7 @@ public class ServicioOrdenar extends Servicio {
 			// Lee algoritmo
 			boolean faltaAlgoritmo = true;
 			while (faltaAlgoritmo) {
-				linea = clienteInput.readLine();
-				log.info("-CLIENTE- " + linea);
+				linea = leer();
 
 				if (!linea.startsWith(CMD_ORDENAR)) {
 					log.error("No coloco " + CMD_ORDENAR + " con el algoritmo despues");
@@ -135,8 +131,7 @@ public class ServicioOrdenar extends Servicio {
 			msg.append(separador).append(lista[i]);
 			separador = ",";
 		}
-		clienteOutput.println(msg);
-		log.info("-SERVER- " + msg);
+		escribir(msg.toString());
 	}
 
 	private AlgoritmoOrdenar crearAlgoritmoOrdenar(String algoritmo) {
@@ -171,26 +166,10 @@ public class ServicioOrdenar extends Servicio {
 	}
 
 	private void enviarError(String msg, boolean cerrarSocket) {
-		clienteOutput.println(msg);
-
+		escribir(msg);
+		
 		if (cerrarSocket) {
 			cerrar();
 		}
 	}
-
-	private void cerrar() {
-		clienteOutput.close();
-		try {
-			clienteInput.close();
-		} catch (IOException e) {
-			log.error("No se pudo cerrar el stream cliente de entrada");
-		}
-		try {
-			cliente.close();
-			log.info("Se cierra el socket y la comunicación con el cliente luego de mensaje");
-		} catch (IOException e) {
-			log.error("No se pudo cerrar el socket cliente");
-		}
-	}
-
 }

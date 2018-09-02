@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 import server.conf.Configuracion;
 import server.exception.ServerException;
 import server.service.Servicio;
+import server.service.ServicioComando;
+import server.stat.EstadisticaServidor;
 
 public class Servidor {
 
@@ -21,11 +23,16 @@ public class Servidor {
 	private Configuracion conf;
 
 	private ServerSocket srvSocket;
+	private ServerSocket srvComandos;
 	private Thread hiloPrincipal;
 	private volatile boolean running;
+	
+	private EstadisticaServidor stats;
 
 	public Servidor(Configuracion cfg) throws ServerException {
 		this.conf = cfg;
+		
+		stats = new EstadisticaServidor();
 	}
 
 	public synchronized void comenzar() throws ServerException {
@@ -38,23 +45,12 @@ public class Servidor {
 
 	private void crearHiloComando() {
 		try {
-			ServerSocket srvComandos = new ServerSocket(conf.getPuertoComando());
+			srvComandos = new ServerSocket(conf.getPuertoComando());
 			log.info("Se crea el socket servidor de comandos en el puerto " + conf.getPuertoComando());
 			while (true) {
 				Socket cltCmd = srvComandos.accept();
-				BufferedReader bin = new BufferedReader(new InputStreamReader(cltCmd.getInputStream()));
-
-				String linea = bin.readLine();
-				log.info("Se recibió el comando: " + linea);
-				if (linea.indexOf(conf.getPalabraClaveTerminar()) >= 0) {
-					parar();
-					break;
-				}
-				bin.close();
-				cltCmd.close();
-			}
-			srvComandos.close();
-			srvComandos = null;
+				darComando(cltCmd);
+			}			
 		} catch (IOException e) {
 			log.error("Ocurrio un error al leer el comando en el hilo de comando", e);
 		}
@@ -107,6 +103,9 @@ public class Servidor {
 			if (srvSocket != null) {
 				log.debug("Parando el accept del hilo principal cerrando el srvsocket");
 				srvSocket.close();
+				
+				log.debug("Parando el accept del hilo de comandos cerrando el srvsocket");
+				srvComandos.close();
 			}
 		} catch (IOException e) {
 			log.error("Error al cerrar el server socket pero de todas maneras se cierra", e);
@@ -122,6 +121,9 @@ public class Servidor {
 		Servicio cltServicio = null;
 		try {
 			cltServicio = Servicio.construirServicio(conf.getServicio());
+			
+			stats.nuevaEstadisticaServicio(cltServicio);
+			
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e1) {
 			log.error("Parece que la clase de la configuración " + conf.getServicio() + " no esta igual al nombre de la clase", e1);
 			return;
@@ -136,5 +138,40 @@ public class Servidor {
 		
 		Thread worker = new Thread(cltServicio);
 		worker.start();
+	}
+	
+
+	private void darComando(Socket clt) {
+		
+		log.info("Recibe un nuevo comando en el puerto cliente " + clt.getPort() + ":" + clt.getLocalPort());
+		
+		Servicio cltServicio = null;
+		try {
+			cltServicio = new ServicioComando(this);
+			
+			cltServicio.configurar(clt);
+			
+		} catch (Exception e1) {
+			log.error("Parece que la clase de la configuración " + conf.getServicio() + " no esta igual al nombre de la clase", e1);
+			return;
+		}
+		
+		try {
+			cltServicio.configurar(clt);
+		} catch (IOException e) {
+			log.error("No se puede configurar el servicio", e);
+			return;
+		}
+		
+		Thread worker = new Thread(cltServicio);
+		worker.start();
+	}
+
+	public Configuracion getConf() {
+		return conf;
+	}
+
+	public EstadisticaServidor getStats() {
+		return stats;
 	}
 }

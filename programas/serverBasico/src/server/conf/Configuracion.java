@@ -6,12 +6,14 @@ public class Configuracion {
 	private static final int PUERTO_CMD = 7677;
 	private static final String SERVICIO = "Ordenar";
 	private static final String SHUTDOWN_KEYWORD = "FINALIZAR";
+	private static final String STATS_CMD = "STATS";
 	private static Configuracion singleton = null;
 	
 	private Configuracion() {
 		puerto = PUERTO_SRV;
 		puertoComando = PUERTO_CMD;
-		palabraClaveTerminar = SHUTDOWN_KEYWORD;
+		comandoFinalizar = SHUTDOWN_KEYWORD;
+		comandoEstadisticas = STATS_CMD;
 		servicio = SERVICIO;
 	}
 	
@@ -24,7 +26,8 @@ public class Configuracion {
 	private int puerto;
 	private String servicio;
 	private int puertoComando;
-	private String palabraClaveTerminar;
+	private String comandoFinalizar;
+	private String comandoEstadisticas;
 	
 	public int getPuerto() {
 		return puerto;
@@ -47,13 +50,19 @@ public class Configuracion {
 		this.puertoComando = puertoComando;
 	}
 
-	public String getPalabraClaveTerminar() {
-		return palabraClaveTerminar;
+	public String getComandoFinalizar() {
+		return comandoFinalizar;
 	}
 
-	public void setPalabraClaveTerminar(String palabraClaveTerminar) {
-		this.palabraClaveTerminar = palabraClaveTerminar;
+	public void setComandoFinalizar(String cmd) {
+		this.comandoFinalizar = cmd;
 	}
-	
-	
+
+	public String getComandoEstadisticas() {
+		return comandoEstadisticas;
+	}
+
+	public void setComandoEstadisticas(String comandoEstadisticas) {
+		this.comandoEstadisticas = comandoEstadisticas;
+	}
 }
