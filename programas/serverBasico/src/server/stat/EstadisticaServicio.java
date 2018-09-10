@@ -56,7 +56,9 @@ public class EstadisticaServicio implements Observer {
 		}
 		
 		MensajeTipo msgTipo = (MensajeTipo)msgTipoSinCast;
-		int cantidadBytes = msgTipo.getMensaje().length();
+		int cantidadBytes = msgTipo.getMensajeLength();
+		if (cantidadBytes <= 0) 
+			cantidadBytes = msgTipo.getMensaje().length();
 		
 		if (msgTipo.getTipo() == Tipo.ENTRADA) {
 			bytesEntrantes += cantidadBytes;

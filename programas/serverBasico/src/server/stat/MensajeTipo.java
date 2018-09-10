@@ -7,10 +7,16 @@ public class MensajeTipo {
 	};
 	
 	private String mensaje;
+	private int mensajeLength;
 	private Tipo tipo;
 	
 	public MensajeTipo(String m, Tipo t) {
 		this.mensaje = m;
+		this.tipo = t;
+	}
+
+	public MensajeTipo(byte[] data, Tipo t) {
+		this.mensajeLength = data.length;
 		this.tipo = t;
 	}
 
@@ -28,6 +34,14 @@ public class MensajeTipo {
 
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
+	}
+
+	public int getMensajeLength() {
+		return mensajeLength;
+	}
+
+	public void setMensajeLength(int mensajeLength) {
+		this.mensajeLength = mensajeLength;
 	}
 	
 	

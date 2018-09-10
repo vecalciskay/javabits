@@ -4,9 +4,10 @@ public class Configuracion {
 
 	private static final int PUERTO_SRV = 7676;
 	private static final int PUERTO_CMD = 7677;
-	private static final String SERVICIO = "Ordenar";
+	private static final String SERVICIO = "Web";
 	private static final String SHUTDOWN_KEYWORD = "FINALIZAR";
 	private static final String STATS_CMD = "STATS";
+	private static final String SERVICIOWEB_CARPETAWEB = "D:\\Temp\\CarpetaWeb";
 	private static Configuracion singleton = null;
 	
 	private Configuracion() {
@@ -15,6 +16,7 @@ public class Configuracion {
 		comandoFinalizar = SHUTDOWN_KEYWORD;
 		comandoEstadisticas = STATS_CMD;
 		servicio = SERVICIO;
+		carpetaWeb = SERVICIOWEB_CARPETAWEB;
 	}
 	
 	public static Configuracion getOrCreate() {
@@ -28,6 +30,7 @@ public class Configuracion {
 	private int puertoComando;
 	private String comandoFinalizar;
 	private String comandoEstadisticas;
+	private String carpetaWeb;
 	
 	public int getPuerto() {
 		return puerto;
@@ -65,4 +68,13 @@ public class Configuracion {
 	public void setComandoEstadisticas(String comandoEstadisticas) {
 		this.comandoEstadisticas = comandoEstadisticas;
 	}
+
+	public String getCarpetaWeb() {
+		return carpetaWeb;
+	}
+
+	public void setCarpetaWeb(String carpetaWeb) {
+		this.carpetaWeb = carpetaWeb;
+	}
+	
 }

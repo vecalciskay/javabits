@@ -28,10 +28,10 @@ public class EstadisticaServidor {
 	
 	@Override
 	public String toString() {
-		StringBuilder result = new StringBuilder("Estadisticas\n");
+		StringBuilder result = new StringBuilder("Estadisticas\r\n");
 		
 		for(EstadisticaServicio statClt : servicios.values()) {
-			result.append(statClt.toString()).append("\n");
+			result.append(statClt.toString()).append("\r\n");
 		}
 		
 		return result.toString();
