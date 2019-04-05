@@ -36,17 +36,9 @@ una de las 3 imágenes.
 
 Cada una de las 3 imágenes se encuentra también en este repositorio:
 
-<div id="imagenes">
-	<div id="img1" style="float:left;">
-		<img src="img/rhino.png" width="200" />
-	</div>
-	<div id="img2" style="float:left;">
-		<img src="img/palestina.png" width="200" />
-	</div>
-	<div id="img3" style="float:left;">
-		<img src="img/trump.png" width="200" />
-	</div>
-</div>
+ rhino.png                                |  palestina.png                                | trump.png
+:----------------------------------------:|:---------------------------------------------:|:------------------------------------------:
+ <img src="img/rhino.png" width="200" />  | <img src="img/palestina.png" width="200" />   | <img src="img/trump.png" width="200" />
 
 En la carpeta img usted puede bajarlas. Las imágenes tienen todas el
 mismo tamaño de 800x500.
@@ -113,6 +105,34 @@ leer los bytes desde donde comienza el archivo que el servidor envía.
 El cliente, habiendo identificado el archivo, ya puede reemplazarlo a la
 imagen actual y repintar el cuadro para que se vea la nueva imagen
 cargada.
+
+## Algoritmos
+
+### Normal (normal)
+Esto es solamente leer la imagen tal cual se encuentra en el archivo.
+
+### Tonos de gris (gris)
+
+Este filtro es bastante sencillo y consiste en colocar el mismo valor 
+a los componentes R, G y B de cada pixel. Entonces, si para un pixel
+se tiene:
+
+R = 34, G = 154, B = 201
+
+Entonces se calcula el promedio y se coloca ese valor para las 3 
+componentes.
+
+Promedio = (34 + 154 + 201)/3 = 130
+
+Entonces: R = 130, G = 130, B = 130
+
+### Floyd Steingberg
+
+Este algoritmo hace que todos los piuntos sean o blancos o negros;
+pero al mismo tiempo mantiene la imagen de manera que todavía se pueda
+reconocer el original. Aquí el enlace a la explicación del algoritmo
+y se puede ver algunos resultados 
+[Floyd Steinberg dithering](https://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering)
 
 ## Logs obligatorios
 Para todas las clases del proyecto es obligatorio el uso de logs con 
