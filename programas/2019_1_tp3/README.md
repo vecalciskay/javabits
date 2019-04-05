@@ -36,7 +36,7 @@ una de las 3 imágenes.
 
 Cada una de las 3 imágenes se encuentra también en este repositorio:
 
-![](../img/rhino.png)
+![](./img/rhino.png)
 
 
 
