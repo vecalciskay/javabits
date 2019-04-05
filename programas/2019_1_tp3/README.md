@@ -46,10 +46,65 @@ mismo tamaño de 800x500.
 ## Protocolo
 
 ### Consulta
-ddd
+El cliente debe enviar la consulta de la siguiente manera:
+
+```
+GET /rhino.png?operacion=gris
+```
+
+En operación se puede utilizar las palabras gris, normal y fs
 
 ### Respuesta
-sdfs
+La respuesta del servidor debe ser bien específica. Si es correcta debe 
+ser la siguiente:
+
+```
+HTTP/1.1 200 OK
+Content-Type: image/png
+
+bytes de la imagen
+```
+Para poder enviar esta información en exactamente ese formato se puede 
+usar el código de ejemplo del programa server2017tpImagen:
+
+```java
+String statusLine = "HTTP/1.1 200 OK";
+String contentType = "Content-Type: image/png";
+
+out.writeBytes(statusLine);
+out.writeBytes(CRLF);
+out.writeBytes(contentType);
+out.writeBytes(CRLF);
+
+// Linea vacia
+out.writeBytes(CRLF);
+
+// Aqui el archivo y/o imagen
+BufferedImage bi = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
+WritableRaster raster = (WritableRaster)bi.getRaster();
+
+int[] rasterPixels = transformarPuntos();
+raster.setPixels(0, 0, ancho, alto, rasterPixels);
+
+try {
+	ImageIO.write(bi, "png", out);
+} catch (IOException e) {
+	e.printStackTrace();
+}
+```
+Fijese que para tener la imagen en la variable bi se usa el transformarPuntos()
+que se encuentra en el programa VerySimpleImageWriter.
+
+De igual manera fijarse que se escrib directamente en el socket con el
+ImageIO.write(..)
+
+El cliente, cuando lee la respuesta debe ser capaz de sacar los primeros bytes
+hasta que encuentre dos \r\n seguidos (es hasta la linea vacía) y luego tiene que 
+leer los bytes desde donde comienza el archivo que el servidor envía.
+
+El cliente, habiendo identificado el archivo, ya puede reemplazarlo a la
+imagen actual y repintar el cuadro para que se vea la nueva imagen
+cargada.
 
 ## Logs obligatorios
 Para todas las clases del proyecto es obligatorio el uso de logs con 
