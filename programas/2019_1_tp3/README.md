@@ -36,9 +36,12 @@ una de las 3 imágenes.
 
 Cada una de las 3 imágenes se encuentra también en este repositorio:
 
-![](./img/rhino.png)
+<img src="img/rhino.png" width="200" />
+<img src="img/palestina.png" width="200" />
+<img src="img/trump.png" width="200" />
 
-
+En la carpeta img usted puede bajarlas. Las imágenes tienen todas el
+mismo tamaño de 800x500.
 
 ## Protocolo
 
