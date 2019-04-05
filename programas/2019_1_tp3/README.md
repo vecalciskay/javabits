@@ -36,9 +36,17 @@ una de las 3 imágenes.
 
 Cada una de las 3 imágenes se encuentra también en este repositorio:
 
-<img src="img/rhino.png" width="200" />
-<img src="img/palestina.png" width="200" />
-<img src="img/trump.png" width="200" />
+<div id="imagenes">
+	<div id="img1" style="float:left;">
+		<img src="img/rhino.png" width="200" />
+	</div>
+	<div id="img2" style="float:left;">
+		<img src="img/palestina.png" width="200" />
+	</div>
+	<div id="img3" style="float:left;">
+		<img src="img/trump.png" width="200" />
+	</div>
+</div>
 
 En la carpeta img usted puede bajarlas. Las imágenes tienen todas el
 mismo tamaño de 800x500.
