@@ -3,7 +3,8 @@ package dijkstra.gui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Iterator;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -43,5 +44,15 @@ public class DijkstraPanel extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		this.repaint();
+	}
+
+	public void removeListeners() {
+		for(MouseListener m : this.getMouseListeners()) {
+			this.removeMouseListener(m);
+		}
+		
+		for(MouseMotionListener m : this.getMouseMotionListeners()) {
+			this.removeMouseMotionListener(m);
+		}
 	}
 }

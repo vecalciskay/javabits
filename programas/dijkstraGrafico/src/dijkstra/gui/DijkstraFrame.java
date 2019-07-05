@@ -15,6 +15,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import dijkstra.edd.coord.GrafoCoordenada;
+import dijkstra.gui.controlador.Controlador;
+import dijkstra.gui.controlador.ControladorModoArco;
+import dijkstra.gui.controlador.ControladorModoDijkstra;
+import dijkstra.gui.controlador.ControladorModoMover;
+import dijkstra.gui.controlador.ControladorModoNodo;
 
 public class DijkstraFrame extends JFrame {
 
@@ -29,8 +34,6 @@ public class DijkstraFrame extends JFrame {
 	
 	private DijkstraPanel panel;
 	
-	private DijkstraControlador controlador;
-	
 	public DijkstraFrame() {
 		initComponents();
 	}
@@ -40,7 +43,6 @@ public class DijkstraFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		modelo = new GrafoCoordenada();
-		controlador = new DijkstraControlador(modelo);
 		panel = new DijkstraPanel(modelo);
 		
 		this.getContentPane().setLayout(new BorderLayout());
@@ -124,32 +126,36 @@ public class DijkstraFrame extends JFrame {
 	}
 
 	protected void menuFile_Dijkstra_Clicked(ActionEvent e) {
-		panel.removeMouseMotionListener(controlador);
-		panel.removeMouseListener(controlador);
+		panel.removeListeners();
 		
 		modelo.setNodoSeleccionado(null);
-		controlador.setModoDijkstra();
-		panel.addMouseListener(controlador);
+		Controlador control = new ControladorModoDijkstra(modelo);
+		panel.addMouseListener(control);
 	}
 
 	protected void menuFile_Mover_Clicked(ActionEvent e) {
-		panel.removeMouseMotionListener(controlador);
-		panel.removeMouseListener(controlador);
+		panel.removeListeners();
 		
 		modelo.setNodoSeleccionado(null);
-		controlador.setModoMover();
-		panel.addMouseListener(controlador);
-		panel.addMouseMotionListener(controlador);
+		Controlador control = new ControladorModoMover(modelo);
+		panel.addMouseListener(control);
+		panel.addMouseMotionListener(control);
 	}
 
 	protected void menuFile_Arco_Clicked(ActionEvent e) {
-		panel.removeMouseMotionListener(controlador);
-		panel.removeMouseListener(controlador);
+		panel.removeListeners();
 		
 		modelo.setNodoSeleccionado(null);
-		controlador.setModoArco();
-		panel.addMouseListener(controlador);
-		panel.addMouseMotionListener(controlador);
+		Controlador control = new ControladorModoArco(modelo);
+		panel.addMouseListener(control);
+		panel.addMouseMotionListener(control);
+	}
+
+	protected void menuFile_New_Clicked(ActionEvent e) {
+		panel.removeListeners();
+		
+		Controlador control = new ControladorModoNodo(modelo);
+		panel.addMouseListener(control);
 	}
 
 	protected void menuFile_Exit_Clicked(ActionEvent e) {
@@ -159,11 +165,4 @@ public class DijkstraFrame extends JFrame {
 		System.exit(0);
 	}
 
-	protected void menuFile_New_Clicked(ActionEvent e) {
-		panel.removeMouseMotionListener(controlador);
-		panel.removeMouseListener(controlador);
-		
-		controlador.setModoNodo();
-		panel.addMouseListener(controlador);
-	}
 }
