@@ -1,7 +1,7 @@
 # Practico 4
 Se debe desarrollar un solo programa. El programa es un cliente que 
 debe conectarse por Internet y obtener listas de información 
-**Viernes 3 de Mayo de 2019**.
+**Martes 14 de Mayo de 2019**.
 
 
 ### Cliente
