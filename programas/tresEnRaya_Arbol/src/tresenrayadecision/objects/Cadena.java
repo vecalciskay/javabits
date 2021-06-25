@@ -2,7 +2,7 @@ package tresenrayadecision.objects;
 
 import java.util.Iterator;
 
-public class Cadena<E> {
+public abstract class Cadena<E> {
 
     protected Cadena.Nodo<E> raiz;
 
